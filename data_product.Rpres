@@ -1,0 +1,59 @@
+Compare yourself to the average woman of 1975
+========================================================
+date: `r format(Sys.Date(), format="%B %d %Y")`
+transition: rotate
+
+<small>
+Presentation on final project for the Developing Data Products course of the Coursera Data Science Specialization.
+</small>
+
+Goal
+========================================================
+
+Create a tool that allows anyone to compare their height and weight to the averages for women aged 30-39 in 1975.
+
+Find out if:
+- you weigh more or less given your height
+- you lie outside typical height and weight ranges
+
+The R code for the presentation can be found on github:
+https://github.com/daviddamen/CourseraDataProduct
+
+Dataset
+========================================================
+
+- The 'women' dataset from the R datasets package
+- 15 observations on height and weight
+- Women aged 30 to 39
+- Source: The World Almanac and Book of Facts, 1975
+- Original source: American Society of Actuaries Build and Blood Pressure Study
+
+Data Cleaning
+========================================================
+The data was transformed to the metric system:
+- inches to centimeter
+- pounds to kilograms
+```{r}
+womenDF <- women
+womenDF$height <- womenDF$height * 2.54
+womenDF$weight <- womenDF$weight * 0.453592
+summary(womenDF)
+```
+
+Example
+========================================================
+The data product lets you enter your height and weight and produces a plot that visualizes how you compare. For instance with my data (the blue dot):
+```{r, echo=FALSE,fig.width=15,fig.height=8}
+  height <- 189
+  weight <- 92.1
+  
+  womenDF[length(womenDF[,1])+1,] <- list(height, weight)
+
+  plot(womenDF$height, womenDF$weight,
+       xlab='Height', ylab='Weight',
+       xlim=c(0, max(womenDF$height) + 10),
+       ylim=c(0, max(womenDF$weight) + 5),
+       col=ifelse(womenDF$weight==weight & womenDF$height==height, "blue", "black"),
+       pch=ifelse(womenDF$weight==weight & womenDF$height==height, 19, 1), 
+       cex=ifelse(womenDF$weight==weight & womenDF$height==height, 2, 1))
+```
